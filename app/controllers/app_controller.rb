@@ -25,9 +25,9 @@ class AppController < ApplicationController
     )
     Pusher.url = "https://b3d4264958cd66d206a3:7105e393c9093834d42b@api.pusherapp.com/apps/145792"
     Pusher.trigger("messages_from_#{user_from_id}_to_#{user_to_id}", 'message', {
-        message: params.fetch(:message),
-        at: Time.now.utc.to_i,
-        name: User.find(user_from_id).name,
+      message: params.fetch(:message),
+      at: Time.now.utc.to_i,
+      name: User.find(user_from_id).name,
     })
 
     render :json => {}
@@ -59,6 +59,21 @@ class AppController < ApplicationController
 
   def user_image
     render :text => HTTP.get("https://gravatar.com/avatar/#{current_user.gravatar_hash}").body.to_s, :layout => false
+  end
+
+  def chat_history
+    user_ids = [current_user.id, params.fetch(:other_user_id).to_i]
+    other_user_name = User.find(params.fetch(:other_user_id).to_i).name
+    chat_messages = ChatMessage.where(:user_from_id => user_ids, :user_to_id => user_ids).order(:created_at)
+    formatted_chat_messages = chat_messages.map { |x|
+      {
+        :at => x.created_at.to_i,
+        :name => x.user_from_id == current_user.id ? "You" : other_user_name,
+        :message => x.message
+      }
+    }
+
+    render :json => {:chat_history => formatted_chat_messages}
   end
 
   private

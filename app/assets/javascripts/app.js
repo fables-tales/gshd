@@ -112,18 +112,30 @@
             return false;
         });
 
+        function renderChatHistory(messages) {
+            for (var i = 0; i < messages.length; i++) {
+                var message = messages[i];
+                message["at"] = new Date(message["at"]*1000);
+                addChatMessage(message.at, message.name, message.message);
+            }
+            $("#chat").append("<hr>");
+        }
+
         function setupMessageCircuit(params) {
             $.getJSON("/current_user_id", function(response) {
                 chattingUser = params.id;
                 var currentUserID = response.id;
-                channel = pusher.subscribe("messages_from_" + chattingUser + "_to_" + currentUserID);
-                channel.bind("message", function(data) {
-                    addChatMessage(new Date(data.at*1000), data.name, data.message);
-                });
-                $.getJSON("/users/" + params.id, function(response) {
-                    $("#chat-header").html("Chatting with " + response.name + "<img src='https://gravatar.com/avatar/" + md5(response.email) + "' style='height:1em;' class='pull-right'>");
-                    $("#chat-wrapper").show();
+                $.get("/chat_history/" + params.id, function(response) {
+                    renderChatHistory(response.chat_history);
+                    channel = pusher.subscribe("messages_from_" + chattingUser + "_to_" + currentUserID);
+                    channel.bind("message", function(data) {
+                        addChatMessage(new Date(data.at*1000), data.name, data.message);
+                    });
+                    $.getJSON("/users/" + params.id, function(response) {
+                        $("#chat-header").html("Chatting with " + response.name + "<img src='https://gravatar.com/avatar/" + md5(response.email) + "' style='height:1em;' class='pull-right'>");
+                        $("#chat-wrapper").show();
 
+                    });
                 });
             });
         }
@@ -180,7 +192,7 @@
             if (channel) {
                 console.log("unbound channel");
                 channel.unbind();
-                $("#chat").clear();
+                $("#chat").empty();
             }
             var hash = hash.slice(1, hash.length);
             console.log("new hash is: " + hash);

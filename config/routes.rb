@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   post "/chat" => "app#chat"
   get "/current_user_id" => "app#current_user_id"
 
+  get "/chat_history/:other_user_id" =>  "app#chat_history"
+
   resources :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
