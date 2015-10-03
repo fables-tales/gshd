@@ -1,6 +1,34 @@
 <div class="container">
   <div class="row">
-    <div id="index" class="col-md-12 card shadow-height-1 top-spacing" style="display:none;">
+    <div id="dashboard" class="col-md-12 card shadow-height-1 top-spacing page" style="display:none;">
+      <div class="row">
+        <div class="col-md-12 text-right">
+          <span class="btn btn-bx"><i class="fa fa-envelope"></i><span class="data-user-unread-messages"> 0</span></span>
+          <img src="/user-image" height=34 class="data-user-image">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <hr>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center" id="dashboard-spinner">
+          <p class="lead"><i class="fa fa-spinner fa-pulse"></i></p>
+        </div>
+        <div class="col-md-12 text-center" id="dashboard-terms" style="display:none">
+          <p class="lead">We don't know anything about you!</p>
+          <input type="text" value="" id="bookmarklet">
+          <p>Drag the text in this box to your bookmarks bar</p>
+          <a href="https://history.google.com/history">Go here</a>
+          <p>and click the new button, then you'll be all set up!</p>
+        </div>
+
+        <div class="col-md-12 text-center" id="dashboard-recs" style="display:none">
+        </div>
+      </div>
+    </div>
+    <div id="index" class="col-md-12 card shadow-height-1 top-spacing page" style="display:none;">
       <div class="row">
         <div class="col-md-12">
           <h1>GSHD</h1>
@@ -8,7 +36,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-10 col-md-offset-1 text-center">
+        <div class="col-md-12 text-center">
           <div class="alert alert-danger" role="alert" style="display:none;" id="signup-errors"></div>
         </div>
       </div>
@@ -25,12 +53,21 @@
         <div class="col-md-6 text-center">
           <h2>Your profile picture</h2>
           <img src="" alt="Profile picture" class="data-gravatar-img" height="80">
-
           <div id="profile-picture-help" style="display:none;">
             <hr>
             <p>Still got the default?</p>
             <button class="btn btn-bx">Why not take a picture</button>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3 text-center">
+          <h3>Log in</h3>
+          <form action="" class="form login-form" id="login-form">
+            <input type="email" placeholder="What's your email?" id="login-email">
+            <input type="password" placeholder="What's your password?" id="login-password">
+            <input type="submit" value="Log in!" class="btn btn-bx" id="login-submit">
+          </form>
         </div>
       </div>
     </div>

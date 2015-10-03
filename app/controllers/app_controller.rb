@@ -15,11 +15,38 @@ class AppController < ApplicationController
     end
   end
 
+  def recommendations
+    render :json => {:recommendations => User.where("id != ?", current_user.id).to_a.sample(4).map { |x| x.attributes.reject {|k,v| /password/ === k }}}
+  end
+
+  def login
+    email = params.fetch(:email)
+    password = params.fetch(:password)
+    if user = User.find_by(:email => email)
+      if BCrypt::Password.new(user.password_hash) == password
+        session[:user_id] = user.id
+        render :text => "", :layout => false, :status => 200
+      else
+        raise ActiveRecord::RecordNotFound
+      end
+    else
+      raise ActiveRecord::RecordNotFound
+    end
+  end
+
+  def user_image
+    render :text => HTTP.get("https://gravatar.com/avatar/#{current_user.gravatar_hash}").body.to_s, :layout => false
+  end
+
   private
 
   def hash_password_from(params)
     password = params.delete(:password)
     password_hash = BCrypt::Password.create(password)
     params.merge(:password_hash => password_hash)
+  end
+
+  def current_user
+    User.find(session[:user_id])
   end
 end

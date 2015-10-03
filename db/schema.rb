@@ -11,7 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151003101633) do
+ActiveRecord::Schema.define(version: 20151003135224) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "affinities", force: :cascade do |t|
+    t.float    "user_1_id"
+    t.float    "user_2_id"
+    t.float    "score"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "terms", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.float    "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_tokens", force: :cascade do |t|
+    t.string   "user_id"
+    t.string   "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
@@ -20,5 +46,7 @@ ActiveRecord::Schema.define(version: 20151003101633) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

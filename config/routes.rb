@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
-  root "app#index"
+  resources :terms
 
+  match "/terms_mass_create" => "terms#mass_create", :via => [:options, :post]
+  root "app#index"
+  get "/term_bookmarklet.js" => "terms#bookmarklet"
+  get "/recommendations" => "app#recommendations"
   post "/signup" => "app#signup"
+  post "/login" => "app#login"
+  get "/user-image" => "app#user_image"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
