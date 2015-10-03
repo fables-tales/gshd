@@ -40,6 +40,8 @@ class TermsController < ApplicationController
           t.save!
         end
       end
+
+      system("cd recommender && python app.py")
     end
     render :text => "", :layout => false
   end

@@ -15,8 +15,31 @@ class AppController < ApplicationController
     end
   end
 
+  def chat
+    user_to_id = params.fetch(:other_user_id)
+    user_from_id = current_user.id
+    ChatMessage.create!(
+      :user_from_id => user_from_id,
+      :user_to_id   => user_to_id,
+      :message      => params.fetch(:message)
+    )
+    Pusher.url = "https://b3d4264958cd66d206a3:7105e393c9093834d42b@api.pusherapp.com/apps/145792"
+    Pusher.trigger("messages_from_#{user_from_id}_to_#{user_to_id}", 'message', {
+        message: params.fetch(:message),
+        at: Time.now.utc.to_i,
+        name: User.find(user_from_id).name,
+    })
+
+    render :json => {}
+  end
+
+  def current_user_id
+    render :json => {:id => current_user.id }
+  end
+
   def recommendations
-    render :json => {:recommendations => User.where("id != ?", current_user.id).to_a.sample(4).map { |x| x.attributes.reject {|k,v| /password/ === k }}}
+    rec_ids = Affinity.where(:user_1_id => current_user.id).order("score DESC").sample(4).map(&:user_2_id)
+    render :json => {:recommendations => User.where(:id => rec_ids)}
   end
 
   def login

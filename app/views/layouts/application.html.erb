@@ -3,6 +3,20 @@
 <head>
   <title>Gshd</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <script src="https://js.pusher.com/3.0/pusher.min.js"></script>
+
+  <script>
+      // Enable pusher logging - don't include this in production
+      Pusher.log = function(message) {
+        if (window.console && window.console.log) {
+          window.console.log(message);
+        }
+      };
+
+      var pusher = new Pusher('b3d4264958cd66d206a3', {
+        encrypted: true
+      });
+  </script>
   <script src="https://blueimp.github.io/JavaScript-MD5/js/md5.js"></script>
   <link type="text/css" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>

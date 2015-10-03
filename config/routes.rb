@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   resources :terms
 
   match "/terms_mass_create" => "terms#mass_create", :via => [:options, :post]
@@ -8,6 +9,10 @@ Rails.application.routes.draw do
   post "/signup" => "app#signup"
   post "/login" => "app#login"
   get "/user-image" => "app#user_image"
+  post "/chat" => "app#chat"
+  get "/current_user_id" => "app#current_user_id"
+
+  resources :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

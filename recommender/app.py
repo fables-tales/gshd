@@ -62,9 +62,13 @@ if __name__ == "__main__":
     conn = database_connection()
     cur = conn.cursor()
     cur.execute("select id from users")
-    for user_id in cur:
+    user_ids = list(cur)
+    cur.execute("delete from affinities")
+    for user_id in user_ids:
         user_id = user_id[0]
         recommendations = svd.similar(int(user_id))
         for id,score in recommendations:
             if id != user_id:
-                print user_id, id, score
+                res = (user_id, id, score)
+                cur.execute("insert into affinities (user_1_id, user_2_id, score, created_at, updated_at) values (%s, %s, %s, now(), now())", res)
+                conn.commit()
